@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f0e8">
+  <meta name="description" content="An interactive guide and schedule auditor for Rusty's AFL fixture scheduling problem.">
+  <title>Fixture Lab | Rusty's AFL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="#overview" data-view-link="overview" aria-label="Fixture Lab home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span><strong>FIXTURE</strong><small>LAB / AFL 27</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="primary-nav">
+        <button class="nav-link active" data-view="overview"><span class="nav-index">00</span> Overview</button>
+        <button class="nav-link" data-view="fixture"><span class="nav-index">01</span> Base fixture</button>
+        <button class="nav-link" data-view="rules"><span class="nav-index">02</span> Rulebook <span class="nav-count">16</span></button>
+        <button class="nav-link" data-view="teams"><span class="nav-index">03</span> Teams <span class="nav-count">19</span></button>
+        <button class="nav-link" data-view="matchups"><span class="nav-index">04</span> Match-ups</button>
+        <button class="nav-link" data-view="venues"><span class="nav-index">05</span> Grounds</button>
+        <button class="nav-link" data-view="solver"><span class="nav-index">06</span> Algorithm lab</button>
+        <button class="nav-link" data-view="source"><span class="nav-index">07</span> Source documents</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="live-dot"></span>
+        <span>SPECIFICATION MODE</span>
+        <span class="sidebar-version">v1.0</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>RUSTY'S AFL</span><b>/</b><span id="crumb-current">OVERVIEW</span></div>
+        <label class="global-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="global-search" type="search" placeholder="Search teams, rules, grounds..." aria-label="Search this guide">
+          <kbd>/</kbd>
+        </label>
+        <a class="source-link" href="docs/01-problem-overview.md" target="_blank" rel="noreferrer">SPEC SOURCE <span>↗</span></a>
+      </header>
+
+      <section class="view active-view" id="view-overview" aria-labelledby="overview-title">
+        <div class="page-intro overview-intro">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-rule"></span> SCHEDULING SYSTEM / 2026 SPEC</div>
+            <h1 id="overview-title">A fixture is<br><em>a constraint system.</em></h1>
+            <p class="intro-copy">Nineteen clubs. Twenty-seven rounds. One schedule that must hold together across travel, rivalries, venues and the broadcast grid.</p>
+          </div>
+          <div class="round-stamp" aria-label="27 rounds, 228 matches">
+            <span>SEASON</span><strong>27</strong><span>ROUNDS</span><i>19 CLUBS / 228 GAMES</i>
+          </div>
+        </div>
+
+        <div class="metric-strip" aria-label="Season parameters">
+          <div><strong>19</strong><span>TEAMS</span></div>
+          <div><strong>27</strong><span>ROUNDS</span></div>
+          <div><strong>228</strong><span>GAMES</span></div>
+          <div><strong>12 <small>H</small> / 12 <small>A</small></strong><span>PER TEAM</span></div>
+          <div><strong>3</strong><span>BYEs / TEAM</span></div>
+        </div>
+
+        <div class="notice notice-warn">
+          <div class="notice-symbol">!</div>
+          <div><strong>Input is not yet solver-complete</strong><p>Rounds 19–21, 25 and 27 have no supplied fixture rows; conditional opponents and match dates are also unresolved. This lab makes those gaps explicit and will not label an unfinished schedule valid.</p></div>
+          <button class="text-button" data-go="solver">Inspect the model <span>→</span></button>
+        </div>
+
+        <div class="section-heading">
+          <div><span class="eyebrow">THE SYSTEM AT A GLANCE</span><h2>One season, many interacting rules</h2></div>
+          <button class="quiet-button" data-go="rules">Browse all rules <span>→</span></button>
+        </div>
+        <div class="overview-grid">
+          <button class="overview-tile tile-dark" data-go="fixture">
+            <span class="tile-kicker">01 / THE GIVEN</span><strong>Base<br>fixture</strong>
+            <span class="tile-copy">Locked matches, byes, home-away patterns and restricted venue slots.</span>
+            <span class="tile-arrow">↗</span>
+          </button>
+          <button class="overview-tile tile-coral" data-go="rules">
+            <span class="tile-kicker">02 / THE BOUNDARIES</span><strong>14 absolute<br>rules</strong>
+            <span class="tile-copy">Hard constraints, from game counts to travel streaks and rematches.</span>
+            <span class="tile-arrow">↗</span>
+          </button>
+          <button class="overview-tile tile-green" data-go="matchups">
+            <span class="tile-kicker">03 / THE PAIRINGS</span><strong>6 double-ups<br>per club</strong>
+            <span class="tile-copy">Regular rivalries, bracket assignments and conditional opponents.</span>
+            <span class="tile-arrow">↗</span>
+          </button>
+          <button class="overview-tile tile-paper" data-go="solver">
+            <span class="tile-kicker">04 / THE METHOD</span><strong>Model.<br>Search. Audit.</strong>
+            <span class="tile-copy">A constraint-programming blueprint plus an interactive candidate auditor.</span>
+            <span class="tile-arrow">↗</span>
+          </button>
+        </div>
+
+        <div class="section-heading section-heading-tight">
+          <div><span class="eyebrow">DOCUMENT COVERAGE</span><h2>The whole brief, made navigable</h2></div>
+          <span class="coverage-count">07 SOURCE FILES</span>
+        </div>
+        <div class="doc-index" id="doc-index"></div>
+        <footer class="page-footer"><span>RUSTY'S AFL FIXTURE LAB</span><span>BUILT FROM THE DOCUMENTED SPEC / NO HIDDEN ASSUMPTIONS</span></footer>
+      </section>
+
+      <section class="view" id="view-fixture" aria-labelledby="fixture-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 01 / THE GIVEN</div>
+          <h1 id="fixture-title">Base fixture</h1>
+          <p>The supplied schedule is the solver's starting state. Choose a round to inspect exactly what is documented; blank source rounds are kept visibly blank.</p>
+        </div>
+        <div class="fixture-controls">
+          <div class="round-picker" id="round-picker" role="group" aria-label="Choose fixture round"></div>
+          <div class="fixture-round-heading"><span id="selected-round-label">ROUND 1</span><span id="round-status" class="status-chip"></span></div>
+        </div>
+        <div id="round-content" class="round-content"></div>
+        <div class="notice notice-neutral"><div class="notice-symbol">i</div><div><strong>Source completeness matters</strong><p>The source calls this the complete base fixture, but contains no rows for Rounds 19–21, 25 or 27. The view does not fabricate the missing slots.</p></div></div>
+        <div class="section-heading"><div><span class="eyebrow">FULL SOURCE</span><h2>Base fixture, line by line</h2></div><button class="quiet-button" data-go="source">Open all source documents <span>→</span></button></div>
+        <div class="markdown-panel" id="base-document"></div>
+      </section>
+
+      <section class="view" id="view-rules" aria-labelledby="rules-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 02 / THE BOUNDARIES</div>
+          <h1 id="rules-title">Rulebook</h1>
+          <p>Hard rules define an acceptable schedule. Preferential rules describe the trade-offs to improve once every hard rule is met.</p>
+        </div>
+        <div class="rule-toolbar">
+          <div class="segmented" role="group" aria-label="Filter rule type">
+            <button class="segment active" data-rule-filter="all">All <span>16</span></button>
+            <button class="segment" data-rule-filter="absolute">Absolute <span>14</span></button>
+            <button class="segment" data-rule-filter="preferential">Preferential <span>2</span></button>
+          </div>
+          <label class="inline-search"><span>⌕</span><input id="rule-search" type="search" placeholder="Filter by rule or keyword"></label>
+        </div>
+        <div class="rule-groups" id="rule-list"></div>
+        <section class="clarification-section">
+          <div class="section-heading"><div><span class="eyebrow">INTERPRETATION NOTES</span><h2>Where the rules need context</h2></div></div>
+          <div class="clarification-grid" id="clarifications"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-teams" aria-labelledby="teams-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 03 / THE COMPETITION</div>
+          <h1 id="teams-title">Teams & brackets</h1>
+          <p>Explore all 19 clubs, their state classification, home grounds and previous-season ladder bracket.</p>
+        </div>
+        <div class="team-toolbar">
+          <div class="segmented" role="group" aria-label="Filter teams by region">
+            <button class="segment active" data-team-filter="all">All <span>19</span></button>
+            <button class="segment" data-team-filter="victorian">Victoria <span>10</span></button>
+            <button class="segment" data-team-filter="interstate">Interstate <span>9</span></button>
+          </div>
+          <label class="inline-search"><span>⌕</span><input id="team-search" type="search" placeholder="Find a team, state or ground"></label>
+        </div>
+        <div class="team-layout">
+          <div class="team-list" id="team-list"></div>
+          <aside class="team-detail" id="team-detail" aria-live="polite"></aside>
+        </div>
+        <div class="bracket-strip" id="bracket-strip"></div>
+      </section>
+
+      <section class="view" id="view-matchups" aria-labelledby="matchups-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 04 / THE PAIRINGS</div>
+          <h1 id="matchups-title">Opponent matrix</h1>
+          <p>Every club has six opponents scheduled twice and twelve scheduled once. “TBD” means the source has not supplied the conditional opponent.</p>
+        </div>
+        <div class="matchup-key"><span><b class="key-dot regular"></b> Regular rivalry</span><span><b class="key-dot assigned"></b> Bracket-assigned</span><span><b class="key-dot conditional"></b> Conditional / unresolved</span></div>
+        <label class="inline-search matchup-search"><span>⌕</span><input id="matchup-search" type="search" placeholder="Filter by team or opponent"></label>
+        <div class="table-scroll"><table class="data-table matchup-table"><thead><tr><th>CLUB</th><th>REGULAR <small>FIXED RIVALRIES</small></th><th>ASSIGNED <small>SAME BRACKET</small></th><th>CONDITIONAL <small>NEEDS RESOLUTION</small></th></tr></thead><tbody id="matchup-body"></tbody></table></div>
+        <div class="notice notice-warn compact-notice"><div class="notice-symbol">!</div><div><strong>One documented double-up list does not resolve to six unique opponents</strong><p>Greater Western Sydney lists Sydney as both Regular and Assigned and has no conditional opponent listed. The documented categories therefore identify only five unique opponents. The algorithm must flag this instead of double-counting a club.</p></div></div>
+        <div class="section-heading"><div><span class="eyebrow">PAIRING DEFINITIONS</span><h2>How the six are formed</h2></div></div>
+        <div class="definition-rows">
+          <div><span class="definition-mark regular-mark">R</span><strong>Regular</strong><p>Fixed rivalry match-ups played twice regardless of ladder position.</p></div>
+          <div><span class="definition-mark assigned-mark">A</span><strong>Assigned</strong><p>Opponents from the same previous-season ladder bracket.</p></div>
+          <div><span class="definition-mark conditional-mark">C</span><strong>Conditional</strong><p>An extra double-up when a Regular opponent is already in the same bracket, or where a bracket has only three clubs. The missing choice is explicitly unresolved.</p></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-venues" aria-labelledby="venues-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 05 / THE GROUNDS</div>
+          <h1 id="venues-title">Venues & travel</h1>
+          <p>Primary grounds, approved secondary venues, contractual obligations and the special location rules that shape a round.</p>
+        </div>
+        <div class="venue-summary" id="venue-summary"></div>
+        <div class="venue-toolbar"><label class="inline-search"><span>⌕</span><input id="venue-search" type="search" placeholder="Find a venue, city or home club"></label><span class="coverage-count" id="venue-count"></span></div>
+        <div class="venue-table-wrap"><table class="data-table"><thead><tr><th>GROUND</th><th>LOCATION</th><th>PRIMARY HOME CLUBS</th><th>CLASS</th></tr></thead><tbody id="venue-body"></tbody></table></div>
+        <div class="special-venue-grid" id="special-venues"></div>
+        <div class="gather-panel"><div class="gather-number">R06</div><div><span class="eyebrow">GATHER ROUND / SOUTH AUSTRALIA</span><h2>Home on paper. Away for travel.</h2><p>All games are in South Australia. Victorian teams may host at the neutral grounds; those games still count as Home in the 12/12 tally but count like interstate Away travel for A4 and A5.</p><div class="gather-grounds" id="gather-grounds"></div></div></div>
+      </section>
+
+      <section class="view" id="view-solver" aria-labelledby="solver-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 06 / THE METHOD</div>
+          <h1 id="solver-title">Algorithm lab</h1>
+          <p>A hard-constraint model is the right tool for this problem. The browser auditor below checks a candidate; the model blueprint shows how a complete solver should construct one.</p>
+        </div>
+        <div class="solver-status"><span class="solver-status-icon">!</span><div><strong>Full fixture generation is blocked by source data</strong><p>Missing rounds, unresolved opponent assignments, and absent calendar dates mean a solver cannot determine a complete valid fixture from the supplied inputs alone.</p></div><span class="solver-status-label">INPUT REQUIRED</span></div>
+        <div class="solver-tabs" role="tablist" aria-label="Algorithm lab sections">
+          <button class="solver-tab active" data-solver-tab="model" role="tab" aria-selected="true">Model design</button>
+          <button class="solver-tab" data-solver-tab="audit" role="tab" aria-selected="false">Audit a schedule</button>
+          <button class="solver-tab" data-solver-tab="gaps" role="tab" aria-selected="false">Input gaps</button>
+        </div>
+        <div class="solver-panel active" id="solver-model" role="tabpanel">
+          <div class="model-intro"><span class="eyebrow">PROPOSED EXACT METHOD</span><h2>Constraint programming with lexicographic optimisation</h2><p>Use a CP-SAT solver such as OR-Tools. First find a schedule satisfying every absolute rule. Only then optimise the preferential rules and, as a final tie-break, minimise changes to mutable base assignments.</p></div>
+          <div class="model-steps">
+            <article><span class="step-no">01</span><div><h3>Freeze the input</h3><p>Represent each supplied slot, bye, venue and broadcast assignment. Lock immutable rows; preserve NOT LOCKED pairings while allowing their documented time or venue changes. Treat restricted-opponent lists as exhaustive domains.</p></div></article>
+            <article><span class="step-no">02</span><div><h3>Define decision variables</h3><p><code>x[t,o,r]</code> selects an unordered opponent pair in round <code>r</code>; <code>h[t,o,r]</code> chooses who hosts; <code>v[g,s]</code> assigns venue/time slot <code>s</code> to game <code>g</code>; <code>b[t,r]</code> records a bye.</p></div></article>
+            <article><span class="step-no">03</span><div><h3>Add hard constraints</h3><p>One match or bye per team-round; 24 matches, 12 Home, 12 Away, 3 Byes; six double-up opponents and twelve single-up opponents; home/away orientation, bye windows, streaks, rematch spacing, venue eligibility and same-day ground capacity.</p></div></article>
+            <article><span class="step-no">04</span><div><h3>Optimise in order</h3><p>Keep all A-rules hard. Maximise P1 pair balance first, then P2 interstate Home/Away alternation. Use the fewest edits to allowed base fields as a deterministic tie-break, never relaxing a hard rule to improve a preference.</p></div></article>
+            <article><span class="step-no">05</span><div><h3>Independently audit</h3><p>Run every rule over the final emitted schedule, including dates and venue/day collisions. Report each failure with team, round and source rule; never convert an unknown input into a pass.</p></div></article>
+          </div>
+          <div class="model-math">
+            <div class="model-math-head"><span class="eyebrow">FORMAL SHAPE</span><span class="mono-tag">CP-SAT / 0-1 VARIABLES</span></div>
+            <pre><code>For every team t and round r:
+  sum(opponent games for t in r) + bye[t,r] = 1
+  sum_r bye[t,r] = 3
+  sum(home games for t) = sum(away games for t) = 12
+
+For every unordered pair {t,o}:
+  sum_r game[{t,o},r] in {1, 2}
+  exactly 6 pairs have count 2; exactly 12 have count 1
+  if count = 2: host orientation is opposite; rounds differ by >= 5
+
+Hard constraints: A1-A14
+Objective: lexicographically maximize (P1, P2, -mutable_base_changes)</code></pre>
+          </div>
+          <div class="notice notice-neutral"><div class="notice-symbol">i</div><div><strong>Why CP-SAT, not a greedy fill?</strong><p>Assignments interact globally: choosing an opponent consumes two teams' round capacity, changes both travel streaks, and may force a venue or rematch elsewhere. A greedy local choice can dead-end late; constraint propagation exposes contradictions early and supports explainable infeasibility checks.</p></div></div>
+        </div>
+        <div class="solver-panel" id="solver-audit" role="tabpanel" hidden>
+          <div class="audit-intro"><div><span class="eyebrow">BROWSER-LOCAL / NO UPLOAD</span><h2>Audit a candidate schedule</h2><p>Paste JSON with <code>matches</code> and <code>byes</code>. The audit runs in this browser. A date is an ISO calendar date; required schema is shown beside the editor.</p></div><button class="quiet-button" id="load-schema">Load empty schema <span>↓</span></button></div>
+          <div class="audit-layout">
+            <div class="editor-column"><label for="schedule-json" class="field-label">CANDIDATE JSON</label><textarea id="schedule-json" spellcheck="false" aria-label="Candidate schedule JSON" placeholder='{"matches": [], "byes": []}'></textarea><div class="editor-actions"><button class="primary-button" id="run-audit">Run audit <span>→</span></button><span id="audit-message" role="status">Candidate remains on this device.</span></div></div>
+            <aside class="schema-column"><span class="field-label">EXPECTED SHAPE</span><pre><code>{
+  "matches": [
+    {
+      "round": 1,
+      "date": "2026-03-12",
+      "day": "Thursday",
+      "home": "Carlton",
+      "away": "Richmond",
+      "venue": "MCG"
+    }
+  ],
+  "byes": [
+    { "team": "Adelaide", "round": 1 }
+  ]
+}</code></pre><p>Each club must appear once per round as a match participant or bye. Use full team and venue names from this guide. Include every scheduled game date to evaluate A13.</p></aside>
+          </div>
+          <div class="audit-results" id="audit-results" aria-live="polite"><div class="audit-empty"><span>RUN</span><p>Audit results will appear here, grouped by rule.</p></div></div>
+        </div>
+        <div class="solver-panel" id="solver-gaps" role="tabpanel" hidden>
+          <div class="section-heading"><div><span class="eyebrow">BLOCKERS BEFORE SOLVE</span><h2>Known input gaps</h2></div><span class="coverage-count">5 CATEGORIES</span></div>
+          <div class="gap-list">
+            <article><b>01</b><div><strong>Missing fixture rounds</strong><p>The base fixture has no game rows for Rounds 19–21, 25 or 27, although it is described as complete. Slots/byes for those rounds are unknown.</p></div><span>BLOCKING</span></article>
+            <article><b>02</b><div><strong>Conditional opponents remain TBD</strong><p>Several clubs have no named Conditional opponent. Greater Western Sydney lists Sydney in both Regular and Assigned and shows no Conditional opponent, leaving only five unique double-up opponents.</p></div><span>BLOCKING</span></article>
+            <article><b>03</b><div><strong>No calendar dates</strong><p>A13 requires at least five full days off between games. Rounds alone do not determine the date difference, especially where round-specific scheduling spans unusual weekdays.</p></div><span>BLOCKING</span></article>
+            <article><b>04</b><div><strong>Venue and slot details absent</strong><p>Some rows have TBD venues or broadcast slots, Round 24 has an unset West Coast venue, and the date/time calendar needed to check same-day ground use is incomplete.</p></div><span>BLOCKING</span></article>
+            <article><b>05</b><div><strong>Rule details need formal interpretation</strong><p>Rules A3–A6 combine game streaks, byes and location. Before production solve, confirm edge semantics for non-consecutive rounds and whether pair balancing P1 is maximised as a count or weighted preference.</p></div><span>CONFIRM</span></article>
+          </div>
+          <div class="gap-callout"><strong>Next concrete input</strong><p>Complete the round-by-round slot/byes table, resolve the conditional opponent matrix, and assign calendar dates. The auditor can then distinguish a real infeasibility from a merely incomplete input.</p><button class="quiet-button" data-go="source">Review the source docs <span>→</span></button></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-source" aria-labelledby="source-title">
+        <div class="page-heading">
+          <div class="eyebrow"><span class="eyebrow-rule"></span> 07 / THE RECORD</div>
+          <h1 id="source-title">Source documents</h1>
+          <p>Every requirement and supplied data table, rendered from the repository's Markdown files. Expand a document to read the complete source.</p>
+        </div>
+        <div class="source-toolbar"><span class="coverage-count">7 DOCUMENTS / LIVE FROM REPOSITORY</span><label class="inline-search"><span>⌕</span><input id="source-search" type="search" placeholder="Search source text"></label></div>
+        <div class="source-documents" id="source-documents"><div class="loading-line"><span class="loader-dot"></span>Loading source documents…</div></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
